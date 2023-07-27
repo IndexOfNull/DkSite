@@ -1,0 +1,37 @@
+{{ define "main" }}
+<div class="card-list-container">
+    {{ range .Pages.ByPublishDate.Reverse }}
+        <div class="project-card">
+
+            {{- $cover := false -}}
+            {{- if index .Params "icon" -}}
+                {{- if .Resources.GetMatch .Params.icon }}
+                    {{- $cover = (.Resources.GetMatch .Params.icon).RelPermalink -}}
+                {{- else -}}
+                    {{- $cover = absURL .Params.icon -}}
+                {{- end -}}
+            {{- else if $.Site.Params.AutoCover -}}
+                {{- if (not .Params.icon) -}}
+                    {{- if .Resources.GetMatch "cover.*" -}}
+                        {{- $cover = (.Resources.GetMatch "cover.*").RelPermalink -}}
+                    {{- end -}}
+                {{- end -}}
+            {{- end -}}
+
+            <a href="{{ .Permalink }}">
+                <img src="{{ $cover }}">
+                <div class="project-card-info">
+                    <h1>{{ .Title | safeHTML }}</h1>
+                    {{- .Date.Format "2006-01-02" -}}
+                </div>
+            </a>
+        </div>
+        <!-- <h3><a class="title" href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        {{ partial "metadata.html" . }}
+        <a class="summary" href="{{ .RelPermalink }}">
+            <p>{{ .Summary }}</p>
+        </a> -->
+    
+    {{ end }}
+</div>
+{{ end }}

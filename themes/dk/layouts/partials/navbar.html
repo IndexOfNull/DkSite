@@ -1,0 +1,13 @@
+ 
+<nav class="inline text-align-bottom">
+    {{ range .Site.Menus.main }}
+    <a class="nav-link {{ cond (eq ($.Page.RelPermalink) .URL) "navbar-selected" "" }}" href="{{ .URL }}">
+    {{ if .Pre }}
+    {{ $icon := printf "<i data-feather=\"%s\"></i> " .Pre | safeHTML }}
+    {{ $icon }}
+    {{ end }}
+    {{ $text := print .Name | safeHTML }}
+    {{ $text }}
+    </a>
+    {{ end }}
+</nav>

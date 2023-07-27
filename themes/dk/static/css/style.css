@@ -1,0 +1,307 @@
+@font-face {
+    font-family: "Tektur";
+    src: url("/fonts/Tektur-Regular.ttf");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "Tektur";
+    src: url("/fonts/Tektur-Bold.ttf");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "Tektur";
+    src: url("/fonts/Tektur-ExtraBold.ttf");
+    font-weight: 800;
+}
+
+body, html {
+    font-family: Tektur;
+    margin: 0px;
+    color: white;
+    background: rgba(50,50,68,1);
+}
+
+p {
+    color: white;
+}
+
+.page-title {
+    font-weight: 900;
+    letter-spacing: 0.25rem;
+    font-size: 6rem;
+    font-weight: 800;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+
+.splash-title {
+    font-weight: bold;
+    letter-spacing: 0.25rem;
+    font-size: 6rem;
+    margin-top: 0px;
+    margin-bottom: 1.25rem;
+    line-height: 75%;
+}
+
+.splash-subtitle {
+    color: #aaa;
+    margin-top: 0px;
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.large-text {
+    font-size: 2rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.footer {
+    bottom: 0px;
+    width: 100%;
+    margin-top: 3rem;
+    height: 4rem;
+}
+
+.splash-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.body-wrapper {
+    width: 100%;
+}
+
+.page-container {
+    display: block;
+    margin: auto;
+    width: 60%;
+    
+}
+
+.horizontal-divider {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#content {
+    margin-top: 1rem;
+}
+
+.inline {
+    display: inline;
+}
+
+.float-right {
+    float: right;
+}
+
+.header-logo {
+    margin-right: 1rem;
+    padding-right: 1rem;
+    border-right: white solid 1px;
+    color: white;
+}
+
+/*
+***************
+    Post Page
+***************
+*/
+
+.post-title {
+    font-size: 4rem;
+    line-height: ;
+    margin-bottom: 0.5rem;
+}
+
+/*
+***************
+    NAVBAR
+***************
+*/
+
+
+a:link {
+    color: white;
+    text-decoration: none;
+}
+
+a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+a:not(.navbar-selected):hover {
+    color: aqua;
+    text-decoration: double underline overline aqua;
+    text-decoration-thickness: 3px;
+}
+
+.navbar-selected {
+    background-color: aqua;
+    color: black !important;
+}
+
+.nav-link {
+    margin-right: 1rem;
+    padding: 0.25rem;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+nav .nav-link:last-child {
+    margin-right: 0px;
+}
+
+/*
+***************
+    Card List
+***************
+*/
+
+.card-list-container {
+    display: grid;
+    grid-template-columns: repeat(3, 33%);
+    gap: 0.25rem;
+    width: 100%;
+}
+
+.project-card {
+    transition: transform 0.1s ease-in-out;
+    position: relative;
+}
+
+.project-card:hover {
+    transform: scale(1.025, 1.025);
+    cursor: pointer;
+    z-index: 2;
+}
+
+.project-card img {
+    width: 100%;
+    height: auto;
+}
+
+.project-card-info {
+    position: absolute;
+    padding: 0.5rem;
+    bottom: -0.5rem;
+    background-color: rgba(0, 0, 0, 0.75);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.project-card-info h1 {
+    margin: 0px;
+}
+
+/*
+***************
+    Colorful Divider
+***************
+*/
+
+.colorful-divider {
+    width: 100%;
+    height: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+}
+
+.colorful-divider div {
+    height: 100%;
+    width: 100;
+}
+
+.colorful-divider div:nth-child(1) {
+    background-color: #0fffee;
+}
+
+.colorful-divider div:nth-child(2) {
+    background-color: #fc0fff;
+}
+
+.colorful-divider div:nth-child(3) {
+    background-color: #f8ff0f;
+}
+
+.colorful-divider div:nth-child(4) {
+    background-color: #8d8d8d;    
+}
+
+.text-align-bottom {
+    text-align: text-bottom;
+}
+
+/*
+***************
+    Helpers Classes
+***************
+*/
+
+.small-hide {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+
+    .card-list-container {
+        grid-template-columns: repeat(2, 50%);
+    }
+
+    .header-logo {
+        display: block;
+        border: none;
+        margin-bottom: 1rem;
+        text-align: center;
+        padding-right: 0px;
+        margin-right: 0px;
+    }
+
+    .small-hide {
+        display: inherit;
+    }
+
+    html, body {
+        background: #323244;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .page-container {
+        width: 90%;
+    }
+
+    .splash-title {
+        font-size: 4rem;
+    }
+
+    .splash-container {
+        width: 95%;
+        margin: auto;
+    }
+
+    .splash-subtitle {
+        font-size: 0.7rem;
+    }
+
+    .card-list-container {
+        grid-template-columns: repeat(2, 50%);
+    }
+
+    .project-card-info h1 {
+        font-size: large;
+    }
+
+}
