@@ -6,7 +6,8 @@
 {{ if index .Params "cover" }}
     <br>
     <div class="text-center">
-        <img src="{{ index .Params "cover" }}">
+        <img class="cover-image" src="{{ index .Params "cover" }}">
+        <p class="subtitle"><i>{{ index .Params "coverAltText" }}</i></p>
     </div>
 {{ end }}
 {{ with .Params.tags }}

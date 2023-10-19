@@ -17,14 +17,24 @@
 }
 
 body, html {
-    font-family: Tektur;
     margin: 0px;
     color: white;
-    background: rgba(50,50,68,1);
+
+    background: rgb(68,68,68);
 }
 
 p {
     color: white;
+    font-size: 20px;
+    line-height: 36px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Tektur;
+}
+
+.styled-font {
+    font-family: Tektur;
 }
 
 .page-title {
@@ -46,7 +56,7 @@ p {
     line-height: 75%;
 }
 
-.splash-subtitle {
+.subtitle {
     color: #aaa;
     margin-top: 0px;
     font-size: 1.25rem;
@@ -92,10 +102,6 @@ p {
     margin-bottom: 0.5rem;
 }
 
-#content {
-    margin-top: 1rem;
-}
-
 .inline {
     display: inline;
 }
@@ -113,14 +119,27 @@ p {
 
 /*
 ***************
-    Post Page
+Post Page
 ***************
 */
 
 .post-title {
     font-size: 4rem;
-    line-height: ;
     margin-bottom: 0.5rem;
+}
+
+#content {
+    margin-top: 1rem;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.cover-image {
+    width: 100%;
+    height: auto;
+}
+
+.top-return-button {
+    text-align: center;
 }
 
 /*
@@ -129,18 +148,17 @@ p {
 ***************
 */
 
-
-a:link {
+.styled-link:link {
     color: white;
     text-decoration: none;
 }
 
-a:visited {
+.styled-link:visited {
     color: white;
     text-decoration: none;
 }
 
-a:not(.navbar-selected):hover {
+.styled-link:not(.navbar-selected):hover {
     color: aqua;
     text-decoration: double underline overline aqua;
     text-decoration-thickness: 3px;
@@ -160,6 +178,28 @@ a:not(.navbar-selected):hover {
 
 nav .nav-link:last-child {
     margin-right: 0px;
+}
+
+/*
+***************
+    Hrefs
+***************
+*/
+
+a:link {
+    color: aqua;
+    text-decoration: none;
+}
+
+a:visited {
+    color: aqua;
+    text-decoration: none;
+}
+
+a:not(.navbar-selected):hover {
+    color: aqua;
+    text-decoration: double underline overline aqua;
+    text-decoration-thickness: 3px;
 }
 
 /*
@@ -269,10 +309,6 @@ nav .nav-link:last-child {
 
     .small-hide {
         display: inherit;
-    }
-
-    html, body {
-        background: #323244;
     }
 
 }
