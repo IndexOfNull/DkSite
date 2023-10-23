@@ -21,8 +21,10 @@
             <a class="styled-link" href="{{ .Permalink }}">
                 <img src="{{ $cover }}">
                 <div class="project-card-info">
-                    <h1>{{ .Title | safeHTML }}</h1>
-                    {{- .Date.Format "2006-01-02" -}}
+                    <div>
+                        <h1>{{ .Title | safeHTML }}</h1>
+                        {{- .Date.Format "2006-01-02" -}}
+                    </div>
                 </div>
             </a>
         </div>

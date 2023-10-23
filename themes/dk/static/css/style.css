@@ -16,11 +16,15 @@
     font-weight: 800;
 }
 
+:root {
+    --regular-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body, html {
     margin: 0px;
     color: white;
-
     background: rgb(68,68,68);
+    font-family: var(--regular-font);
 }
 
 p {
@@ -56,11 +60,21 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 75%;
 }
 
-.subtitle {
-    color: #aaa;
-    margin-top: 0px;
+.subtitle, figcaption p {
+    color: #ccc;
+    margin-top: 0.75rem;
     font-size: 1.25rem;
     margin-bottom: 0.75rem;
+    font-weight: 400;
+}
+
+figcaption p {
+    font-style: italic;
+    text-align: center;
+}
+
+figure {
+    text-align: center;
 }
 
 .large-text {
@@ -130,7 +144,10 @@ Post Page
 
 #content {
     margin-top: 1rem;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#content img {
+    max-width: 100%;
 }
 
 .cover-image {
@@ -218,6 +235,8 @@ a:not(.navbar-selected):hover {
 .project-card {
     transition: transform 0.1s ease-in-out;
     position: relative;
+    width: 100%;
+    box-shadow: 6px 4px 8px #0003;
 }
 
 .project-card:hover {
@@ -228,16 +247,18 @@ a:not(.navbar-selected):hover {
 
 .project-card img {
     width: 100%;
-    height: auto;
+    height: 100%;
 }
 
 .project-card-info {
     position: absolute;
-    padding: 0.5rem;
-    bottom: -0.5rem;
+    bottom: 0px;
     background-color: rgba(0, 0, 0, 0.75);
     width: 100%;
-    box-sizing: border-box;
+}
+
+.project-card-info div {
+    padding: 0.5rem;
 }
 
 .project-card-info h1 {
@@ -311,13 +332,13 @@ a:not(.navbar-selected):hover {
         display: inherit;
     }
 
-}
-
-@media (max-width: 600px) {
-
     .page-container {
         width: 90%;
     }
+
+}
+
+@media (max-width: 600px) {
 
     .splash-title {
         font-size: 4rem;
