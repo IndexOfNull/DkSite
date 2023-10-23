@@ -2,10 +2,10 @@
 title: "This Website"
 date: 2023-07-23T11:28:00-05:00
 draft: true
-icon: "/projects/this-website/dksite_icon.jpg"
-cover: "/projects/this-website/cover.png"
-coverAltText: "An early version of this site's home page"
+icon: "/images/projects/this-website/dksite_icon.jpg"
 ---
+
+{{< figure src="/images/projects/this-website/cover.png" caption="An early version of this site's home page" >}}
 
 # Hello World!
 
