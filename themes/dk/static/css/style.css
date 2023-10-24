@@ -362,3 +362,9 @@ a:not(.navbar-selected):hover {
     }
 
 }
+
+/* Flash of unstyled content prevention hack (used in combination with <head> styling) */
+html {
+    visibility: visible;
+    opacity: 1;
+}
