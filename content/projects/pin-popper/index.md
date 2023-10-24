@@ -6,7 +6,7 @@ draft: false
 icon: "/images/projects/pin-clutch-popper/icon.png"
 ---
 
-{{< figure src="/images/projects/pin-clutch-popper/coverimage.jpg" caption="It's more interesting than a pair of tweezers, I swear!" >}}
+{{< figure src="/images/projects/pin-popper/coverimage.jpg" caption="It's more interesting than a pair of tweezers, I swear!" >}}
 
 # What Is This Thing?
 
@@ -14,7 +14,7 @@ Truthfully, this is a pair of 3D printed tweezers (I call them pin poppers). How
 
 # The Story
 
-{{< figure src="/images/projects/pin-clutch-popper/pincollection.jpg" caption="The pin collection in question (I have a lot more now)" >}}
+{{< figure src="/images/projects/pin-popper/pincollection.jpg" caption="The pin collection in question (I have a lot more now)" >}}
 
 One night, I decided to organize my Odyssey of the Mind pin collection. Since pin trading is somewhat of a big deal with Odyssey of the mind, I have a *lot* of pins. Naturally, that meant I had to deal with a lot of the little rubber pin backs securing my pins. Normally, removing these involves pinching them with your fingers and pulling up, which works great until you realize you have to pinch and pull over a hundred times. Needless to say, my fingers *hurt* by the end of that night. "If only there was a way to make this easier," I thought to myself. I then remembered that I was a maker and didn't have to wait for someone to make it easier for me; *I could do it myself*.
 
@@ -22,13 +22,13 @@ My mind immediately jumped to keyboards. Specifically, keycap removers. In princ
 
 Having recently learned Fusion 360, I figured it would be a perfect opportunity to test out my new skills. With the clock ticking past midnight, I got to work and made another prototype:
 
-{{< figure src="/images/projects/pin-clutch-popper/firstdesign.jpg" caption="The next iteration" >}}
+{{< figure src="/images/projects/pin-popper/firstdesign.jpg" caption="The next iteration" >}}
 
 3D printing was my manufacturing method of choice for this project, so I printed out this design and found that it was almost as flimsy as the paper clips. It bent too much and was too unweildy to be used effectively. At this point, I realized ergonomics and the physical properties of plastic would have a major influence in my design. Around this time, I also began giving serious thought to making large quantities of my tool to give out; manufacturing time and cost became an important factor as well. From there, the prototyping cycle continued. I tweaked the thickness and stiffness of the tool, shortened it to make it easier to hold, and added a few other creature comforts until I was happy.
 
-{{< figure src="/images/projects/pin-clutch-popper/prototypeprint.png" caption="Printing out different variants to test" >}}
+{{< figure src="/images/projects/pin-popper/prototypeprint.png" caption="Printing out different variants to test" >}}
 
-{{< figure src="/images/projects/pin-clutch-popper/seconddesign.jpg" caption="The is the design I ultimately went with" >}}
+{{< figure src="/images/projects/pin-popper/seconddesign.jpg" caption="The is the design I ultimately went with" >}}
 
 ---
 
@@ -36,7 +36,7 @@ Having recently learned Fusion 360, I figured it would be a perfect opportunity 
 
 As I said before, my goal was to make a bunch of these, and make a bunch I did. By this time, Odyssey of the Mind world finals were fast approaching (I had only a few days to finish this project), and I was set on sharing my creation. I ran my school's 3D printer for 20 hours churning out pin poppers. I managed to use a little over a kilogram of filament in the process, yielding over 100 pin poppers. I'm rather proud of how little material they need; I don't think I could have reasonably done much better from a material efficiency standpoint. 
 
-{{< figure src="/images/projects/pin-clutch-popper/batchofpullers.png" caption="One batch (of three)" >}}
+{{< figure src="/images/projects/pin-popper/batchofpullers.png" caption="One batch (of three)" >}}
 
 Everything finished printing *just* before I had to load up and head off for Iowa. The timing was so tight I wound up post-processing the prints during the drive up.
 
