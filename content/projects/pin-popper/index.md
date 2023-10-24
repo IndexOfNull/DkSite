@@ -2,7 +2,7 @@
 title: "Pin Clutch Popper"
 date: 2022-05-22T00:00:00-05:00
 updated: 2023-10-23T02:42:00-05:00
-draft: true
+draft: false
 icon: "/images/projects/pin-clutch-popper/icon.png"
 ---
 

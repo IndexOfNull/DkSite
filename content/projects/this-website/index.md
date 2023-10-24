@@ -1,7 +1,7 @@
 ---
 title: "This Website"
 date: 2023-07-23T11:28:00-05:00
-draft: true
+draft: false
 icon: "/images/projects/this-website/dksite_icon.jpg"
 ---
 
