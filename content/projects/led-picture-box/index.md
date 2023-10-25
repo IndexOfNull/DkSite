@@ -13,7 +13,7 @@ This project is a continuation of my [LED Tophat](/projects/led-tophat) project,
 
 # What to do With the Hat?
 
-After one round of tirelessly CADing curved geometry for my LED Tophat, I was rewarded with quite possibly the coolest hat at the 2023 Odyssey of the Mind World Finals (read the project post for a few funny stories). When world finals ended, I carefully disassembled the hat for air transit. After returning home, I realized that I had no use for the hat, and the parts for the project weren't exactly cheap. That raised the question: how can I repurpose the hardware for daily use? My answer: a cool LED box that could display what ever I wanted!
+After one round of tirelessly CADing curved geometry for my LED Tophat, I was rewarded with quite possibly the coolest hat at the 2023 Odyssey of the Mind World Finals. When world finals ended, I carefully disassembled the hat for air transit. After returning home, I realized that I had no use for the hat, and the parts for the project weren't exactly cheap. That raised the question: how can I repurpose the hardware for daily use? My answer: a cool LED box that could display what ever I wanted!
 
 ---
 
