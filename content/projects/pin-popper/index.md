@@ -3,7 +3,7 @@ title: "Pin Clutch Popper"
 date: 2022-05-22T00:00:00-05:00
 updated: 2023-10-23T02:42:00-05:00
 draft: false
-icon: "/images/projects/pin-clutch-popper/icon.png"
+icon: "/images/projects/pin-popper/icon.png"
 ---
 
 {{< figure src="/images/projects/pin-popper/coverimage.jpg" caption="It's more interesting than a pair of tweezers, I swear!" >}}
