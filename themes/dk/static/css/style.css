@@ -146,8 +146,9 @@ Post Page
     margin-top: 1rem;
 }
 
-#content img {
+#content img, #content video {
     max-width: 100%;
+    max-height: 55vh;
 }
 
 .cover-image {
