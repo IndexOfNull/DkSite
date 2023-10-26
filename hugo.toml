@@ -1,4 +1,4 @@
-baseURL = 'http://example.org/'
+baseURL = 'https://damien.kazewych.com/'
 languageCode = 'en-us'
 title = 'Damien Kazewych'
 theme = 'dk'
@@ -18,3 +18,8 @@ copyright = '© Damien Kazewych 2023'
     pre = "blog"
     url = "/blog/"
     weight = 3
+  [[menu.main]]
+    name = "GitHub"
+    pre = "github"
+    url = "https://github.com/IndexOfNull"
+    weight = 4
