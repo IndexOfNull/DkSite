@@ -4,7 +4,7 @@ date: 2023-10-19T2:02:00-05:00
 draft: true
 ---
 
-{{<figure src="/tiw/tiwlogo.png" >}}
+{{<figure src="/images/misc/tiwlogo.png" >}}
 
 Hello! Thank you for taking the time to review my TIW application. I love learning and building cool things, so I'm quite excited to have the opportunity to utilize (and hopefully become more involved with) the tools at TIW.
 
