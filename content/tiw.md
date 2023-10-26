@@ -1,7 +1,7 @@
 ---
 title: "Greetings, TIW!"
 date: 2023-10-19T2:02:00-05:00
-draft: true
+draft: false
 ---
 
 {{<figure src="/images/misc/tiwlogo.png" >}}
