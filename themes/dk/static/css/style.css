@@ -108,7 +108,10 @@ figure {
     display: block;
     margin: auto;
     width: 60%;
-    
+}
+
+.project-body-container {
+    text-align: justify;
 }
 
 .horizontal-divider {
