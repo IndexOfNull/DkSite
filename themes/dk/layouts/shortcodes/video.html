@@ -2,7 +2,7 @@
     {{- if .Get "link" -}}
         <a href="{{ .Get "link" }}"{{ with .Get "target" }} target="{{ . }}"{{ end }}{{ with .Get "rel" }} rel="{{ . }}"{{ end }}>
     {{- end -}}
-    <video controls class="{{ .Get "class" }}" src="{{ .Get "src" }}" loop="{{ .Get "loop" }}" autoplay="{{ .Get "autoplay" }}"></video>
+    <video {{ if ne (.Get "controls") "false" }}controls {{ end }} class="{{ .Get "class" }}" src="{{ .Get "src" }}" loop="{{ .Get "loop" }}" autoplay="{{ .Get "autoplay" }}"></video>
     {{- if .Get "link" }}</a>{{ end -}}
     {{- if or (or (.Get "title") (.Get "caption")) (.Get "attr") -}}
         <figcaption>
