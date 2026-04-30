@@ -1,7 +1,7 @@
 ---
 title: "Data Science Lab (ECE 460J) - Final Project"
 date: 2026-04-28T00:00:00-05:00
-draft: true
+draft: false
 icon: "/images/projects/data-sci-lab-final-project/icon.jpg"
 authors: ["Vanessa Do", "Divya Radhakrishnan", "Joey Spiro", "Kale Weimer"]
 ---
