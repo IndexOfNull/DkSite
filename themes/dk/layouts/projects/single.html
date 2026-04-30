@@ -1,17 +1,29 @@
 {{ define "main" }}
-<div>
-    <h1 class="post-title">Project: {{ .Title }}</h1>
+
+<div class="project-header">
+    <p class="project-breadcrumb"><a href="{{ absURL "projects/" }}">← Projects</a></p>
+    <h1 class="post-title">{{ .Title }}</h1>
     <div class="post-metadata">
-        {{ partial "metadata.html" . }}
+        <span class="meta-date">{{ .PublishDate.Format "Jan 2, 2006" }}</span>
+        {{ with .Params.tags }}
+        <span class="meta-tags">
+            {{ range . }}
+            <span class="tag">{{ . }}</span>
+            {{ end }}
+        </span>
+        {{ end }}
         {{ with .Params.authors }}
-        <i data-feather="users"></i>
-        Co-authors: {{ delimit . ", " }}
+        <span class="meta-authors">with {{ delimit . ", " }}</span>
         {{ end }}
     </div>
 </div>
-<br>
+
 <div class="project-body-container">
     {{ .Content }}
 </div>
-<p class="top-return-button"><a href="#">Back to top</a></p>
+
+<div class="project-footer">
+    <a href="{{ absURL "projects/" }}" class="back-link">← Back to Projects</a>
+</div>
+
 {{ end }}

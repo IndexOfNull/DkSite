@@ -2,15 +2,14 @@
 <html>
     {{- partial "head.html" . -}}
     <body>
+        {{- partial "header.html" . -}}
         <div class="body-wrapper">
-            <span class="page-container half-width">                
-                {{- partial "header.html" . -}}
+            <div class="page-container">
                 <div id="content">
                 {{- block "main" . }}{{- end }}
                 </div>
                 {{- partial "footer.html" . -}}
-            </span>
+            </div>
         </div>
-
     </body>
 </html>

@@ -1,14 +1,81 @@
-{{ define "main" }}
+<!DOCTYPE html>
+<html>
+    {{- partial "head.html" . -}}
+    <body>
+        <div class="home-wrapper">
+            <div class="home-inner">
+                <div class="splash-content">
+                    <h1 class="text-center splash-title">{{ .Site.Title }}</h1>
+                    <h3 class="subtitle text-center"><i>UT Austin ECE Student and <span id="tagline-word">drummer</span></i></h3>
+                    {{- partial "colorfuldivider.html" . -}}
+                </div>
 
-<div class="splash-content">
-  <div class="">
-    <h3 class="subtitle text-center"><i>{{ .Site.Params.SplashSubtitle }}</i></h3>
-    <h1 class="text-center splash-title">{{ .Site.Title }}</h1>
-  </div>
-  {{- partial "colorfuldivider.html" . -}}
-  <br>
-  <div class="text-center">
-    {{- partial "navbar.html" . -}}
-  </div>
-</div>
-{{ end }}
+                {{- $projects := where .Site.RegularPages "Section" "projects" -}}
+                {{- $projects = first 3 ($projects.ByPublishDate.Reverse) -}}
+                {{- if $projects -}}
+                <section class="home-featured">
+                    <div class="home-featured-inner">
+                        <h2 class="home-section-title">Recent Work</h2>
+                        <div class="card-list-container">
+                            {{- range $projects -}}
+                                {{- partial "project-card.html" . -}}
+                            {{- end -}}
+                        </div>
+                        <p class="home-see-all"><a href="/projects/">All projects →</a></p>
+                    </div>
+                </section>
+                {{- end -}}
+            </div>
+        </div>
+    <script>
+      (function () {
+        var words = [
+          'drummer',
+          'NAUI certified diver',
+          'skier',
+          'pin trader',
+          'homelabber',
+          'tractor operator',
+          'Home Assistant tinkerer',
+          'ZFS fan',
+          'private AI advocate',
+          'computer networking hobbyist',
+          'movie poster collector',
+          'Docker enjoyer',
+          'swimmer',
+          'Tau Bate',
+          'jazz-fusion addict',
+          'LaTeX user',
+          'CAD acquaintance'];
+        var idx = 0;
+        var el = document.getElementById('tagline-word');
+        var TYPE_SPEED  = 60;
+        var ERASE_SPEED = 35;
+        var PAUSE_AFTER = 2200;
+        var PAUSE_NEXT  = 300;
+
+        function type(word, i) {
+          el.textContent = word.slice(0, i);
+          if (i < word.length) {
+            setTimeout(function () { type(word, i + 1); }, TYPE_SPEED);
+          } else {
+            setTimeout(erase, PAUSE_AFTER);
+          }
+        }
+
+        function erase() {
+          var text = el.textContent;
+          if (text.length > 0) {
+            el.textContent = text.slice(0, -1);
+            setTimeout(erase, ERASE_SPEED);
+          } else {
+            idx = (idx + 1) % words.length;
+            setTimeout(function () { type(words[idx], 0); }, PAUSE_NEXT);
+          }
+        }
+
+        setTimeout(erase, PAUSE_AFTER);
+      })();
+    </script>
+    </body>
+</html>

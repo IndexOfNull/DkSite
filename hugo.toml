@@ -4,6 +4,9 @@ title = 'Damien Kazewych'
 theme = 'dk'
 copyright = '© Damien Kazewych 2023'
 
+[markup.goldmark.parser.attribute]
+  block = true
+
 [params]
   splashSubtitle = 'Programmer, Drummer, and a few other things...'
 

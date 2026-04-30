@@ -6,15 +6,15 @@ icon: "/images/projects/data-sci-lab-final-project/icon.jpg"
 authors: ["Vanessa Do", "Divya Radhakrishnan", "Joey Spiro", "Kale Weimer"]
 ---
 
-{{< video src="/video/projects/data-sci-lab-final-project/460jreencode.mp4" caption="Author's Note: Our training process for our fine-tune in the video was broken! Keep reading to see the fixed version!">}}
+{{< video src="/video/projects/data-sci-lab-final-project/460jreencode.mp4" caption="Author's Note: Our fine-tune process in the video was broken, and our analysis has changed! Keep reading...">}}
 
 # Introduction
-Retrieval-Augmented Generation (RAG) systems are only as good as their retrieval step. Even without powerful language models, poor document retrieval leads to weak, incorrect, or useless outputs. However, evaluating retrieval systems is difficult, and requires a dataset that clearly defines what the correct document should be for any given query. 
+Retrieval-Augmented Generation (RAG) systems are only as good as their retrieval step. Even without powerful language models, poor document retrieval leads to weak, incorrect, or useless outputs. However, evaluating retrieval systems is difficult, and it requires a dataset that clearly defines what the correct document should be for any given query. 
 In this project, we set out to build our own synthetic (question, document) dataset, and use it to evaluate different retrieval methods. Instead of relying on existing benchmarks, we created a pipeline that generates queries from real documents and measures how well the different models retrieve the correct information. 
 
 # What We Did
 Our goal was to simulate a real-world retrieval problem: Given a query about supreme court cases, which retrieval method is most effective at finding the correct case? To answer this question, we:
-* Built a dataset a dataset of (question, documents) pairs
+* Built a dataset of (question, documents) pairs
 * Fine-tuned our own embedding model on our data set
 * Compared multiple retrieval methods (TF-IDF, BM25, embedding models) using ranking metrics (recall, precision, ndcg)
 * Analyzed the results
@@ -23,11 +23,11 @@ Our goal was to simulate a real-world retrieval problem: Given a query about sup
 We were interested in coming up with our own data set. To keep things interesting (but not too difficult), we decided on scraping summaries of US Supreme Court from Oyez.org. Each case summarized by Oyez usually comes with a summary of the case and a conclusion, which are usually about the size of a paragraph. Each page is also homogenous, which greatly simplifies data set creation.
 
 
-Selenium is a natural choice for scraping, but it is a bit heavy. It’s always worth checking if your page fetches data from an API. Many times, you can leverage this for scraping purposes. Usually, this only involves opening up your browsers developer tools and poking around in the "Network" tab.
+Selenium is a natural choice for scraping, but it is a bit heavy. It’s always worth checking if your page fetches data from an API. Many times, you can leverage this for scraping purposes. Usually, this only involves opening up your browser's developer tools and poking around in the "Network" tab.
 
 {{< figure src="/images/projects/data-sci-lab-final-project/networktab.png" caption="Discovering the Oyez API" >}}
 
-Lucky for us, we can see that Oyez has an API we can use, which saves a fair bit of work parsing out the data ourselves. In order to scrape every case, we need to first scrape the listing. The `requests` library makes the relatively easy:
+Lucky for us, we can see that Oyez has an API we can use, which saves a fair bit of work parsing out the data ourselves. In order to scrape every case, we need to first scrape the listing. The `requests` library makes this relatively easy:
 
 
 ```py
@@ -119,7 +119,7 @@ df = df.groupby(df.index).agg('first') # This dropped 70 duplicate entries!
 ```
 
 
-We're also primarily interested in the text content of these pages, so any rows without any text content are useless to us. Doing this is a bit ugly in `pandas`; we can find all the row indexes that *do* have at least one filled, then regenerates our DataFrame. It's not efficient, but it gets the job done:
+We're also primarily interested in the text content of these pages, so any rows without any text content are useless to us. Doing this is a bit ugly in `pandas`; we can find all the row indexes that *do* have at least one text field filled, then regenerate our DataFrame. It's not efficient, but it gets the job done:
 ```py
 content_columns = ['facts_of_the_case', 'question', 'conclusion'] # Columns with our text content
 df = df[~df[content_columns].isna().all(axis=1)]                  # Drop rows where all content is empty
@@ -145,7 +145,7 @@ for oyez_id in df.index:                                          # Iterate over
 ```
 
 
-Interestingly, some pages had non-empty text fields that were only filled with blank space. Best we filter that out too. We can do this by regenerating each text-column, setting it to `nan` if it has fewer than 25 charaters. Since this may produce more rows with no valid text data, we need to repeat our little trick to drop those rows:
+Interestingly, some pages had non-empty text fields that were only filled with blank space. Best we filter that out too. We can do this by regenerating each text-column, setting it to `nan` if it has fewer than 25 characters. Since this may produce more rows with no valid text data, we need to repeat our little trick to drop those rows:
 ```py
 content_columns = ['facts_of_the_case', 'question', 'conclusion'] # Columns with our text content
 df[content_columns] = df[content_columns].apply(
@@ -191,14 +191,14 @@ conclusion_arr = df['conclusion'].fillna('Unknown').to_list()
 embeddings_facts = get_embeddings(facts_arr)
 embeddings_conclusion = get_embeddings(conclusion_arr)
 df['facts_openai'] = embeddings_facts
-df['conclusion_openai'] = embeddins_conclusion
+df['conclusion_openai'] = embeddings_conclusion
 ```
 This generates 3,072-dimensional embedding vectors that encode the semantic meaning of each of our chunks. At this point, we need to save our data again. This time, we'll use the parquet format, since CSV won't store these new 11.5 million numbers very efficiently.
 ```py
 df.to_parquet("oyez_cases_embeddings_openai.parquet") # About 80 MB vs 180 MB with CSV!
 ```
 
- With some luck, similar vectors will correspond to potentially related supreme court cases. K-Means clustering allows to find which of these vectors are near each other. Of course, we do this for both the `facts_of_the_case` fields and `conclusion` text fields:
+ With some luck, similar vectors will correspond to potentially related supreme court cases. K-Means clustering allows us to find which of these vectors are near each other. Of course, we do this for both the `facts_of_the_case` fields and `conclusion` text fields:
 ```py
 from sklearn.cluster import KMeans
 import numpy as np
@@ -233,7 +233,7 @@ It's easy to see how these are related—they're about holiday displays! Fortuna
 
 ## LLMs to the Rescue
 
-Now that we have clusters we can feed to an LLM, we need to figure out how to get the LLM to generate the data we want. A good start is coming up with a system prompt that commands it to do our bidding. In our case, we want three questions per cluster. It would also be helpful if we knew what chunks are relevant to each question, so we can ask it to rank the relevance of each chunk for each generated question. Also, if there's any documents not related to the generated question, we could keep them around as hard-negative candidates, since they were similar enough to be clustered.
+Now that we have clusters we can feed to an LLM, we need to figure out how to get the LLM to generate the data we want. A good start is coming up with a system prompt that commands it to do our bidding. In our case, we want three questions per cluster. It would also be helpful if we knew what chunks are relevant to each question, so we can ask it to rank the relevance of each chunk for each generated question. Also, if there are any documents not related to the generated question, we could keep them around as hard-negative candidates, since they were similar enough to be clustered.
 
 Importantly, writing a good system prompt can make a huge difference in the outcome, so it's worth spending some time on. For instance, we were getting a lot of questions that included actual statute numbers, which was certainly too specific. Prompting to avoid legal jargon seemed to help mitigate that issue. Here's what we ultimately came up with:
 
@@ -268,7 +268,7 @@ However, even with our prompts prepared, we still need to address the issue of w
 
 ### Structured Output
 
-Modern LLM API's allow us to enforce a schema for our response, which makes parsing it a piece of cake. In Python, your favorite LLM bindings probably support structured output using `pydantic`. Pydantic makes parsing data into complex nested structures very easy. Aside from being useful in many data-parsing contexts, it can also be used to generate schemas for our LLM! All we have to do is define our response as a set of models:
+Modern LLM APIs allow us to enforce a schema for our response, which makes parsing it a piece of cake. In Python, your favorite LLM bindings probably support structured output using `pydantic`. Pydantic makes parsing data into complex nested structures very easy. Aside from being useful in many data-parsing contexts, it can also be used to generate schemas for our LLM! All we have to do is define our response as a set of models:
 ```py
 from pydantic import BaseModel
 
@@ -280,7 +280,7 @@ class RelatedDocument(BaseModel):
     relevance_rank: int = Field(description="How relevant the document is. Must be unique")
     reasoning: str = Field(description="Why the document is relevant")
 
-# A question and it's associated relevant/irrelevant documents
+# A question and its associated relevant/irrelevant documents
 class GeneratedQuery(BaseModel):
     question: str = Field(description="A natural realistic question from a real person...")
     docs: list[RelatedDocument] = Field(description="Relevant documents. There must be EXACTLY one document per oyez_id, no more, no less")
@@ -308,7 +308,7 @@ gpt_response = client.responses.parse(
 
 ### LLM Batching
 
-It's worth noting that, since we're working with lots of prompts, that most LLM providers offer batch systems. The idea is that you upload tons of prompts that don't need immediate processing. In exchange for possibly waiting a day for your results, you get a discount on usage (usually about half off!). With this in mind, we don't actually use make the requests ourselves, instead we generate a big `.json` file with all of our prompts (and the schema of course). We take this file and upload it straight to OpenAI for processing with `gpt-5-nano`. We then download the results (which are just a `.jsonl`), and parse them into our pydantic schemas. The details of how we generate batches are in the [embeddings.ipynb](https://github.com/IndexOfNull/ECE460J-Project/blob/main/api/embeddings.ipynb) file in the GitHub repo. The biggest hurdle is that we have to dump our `pydantic` schemas into something the batch API likes. The broad strokes are the same, it's just a bit too technical to discuss here.
+It's worth noting that, since we're working with lots of prompts, most LLM providers offer batch systems. The idea is that you upload tons of prompts that don't need immediate processing. In exchange for possibly waiting a day for your results, you get a discount on usage (usually about half off!). With this in mind, we don't actually make the requests ourselves. Instead, we generate a big `.json` file with all of our prompts (and the schema of course). We take this file and upload it straight to OpenAI for processing with `gpt-5-nano`. We then download the results (which are just a `.jsonl`), and parse them into our pydantic schemas. The details of how we generate batches are in the [embeddings.ipynb](https://github.com/IndexOfNull/ECE460J-Project/blob/main/api/embeddings.ipynb) file in the GitHub repo. The biggest hurdle is that we have to dump our `pydantic` schemas into something the batch API likes. The broad strokes are the same, it's just a bit too technical to discuss here.
 
 
 ### Validating the LLM Output
@@ -355,7 +355,7 @@ Finally, after all that trouble, we get question-document pairs that look like t
 
 After building the dataset, we want to figure out what retrieval methods are effective at finding the correct document for our queries. These methods fell into two main categories: lexical retrieval and dense embedding retrieval. 
 
-The two lexical methods we're interested in are BM25 and TF-IDF. In short, TF-IDF tries to score document relevance based on how often a word from the query appears in the search documents. The idea is that, for each word in the query, if lots of documents have that word, it's probably not super indicative of document relevance. By contrast, if a query word appears in just a few documents, it probably tells us a lot about the document's relevance. BM25 is similar, but it also has a few enhancements. BM25 adds diminishing returns to search term frequency, which mitigates an issue in TF-IDF called *term frequeny saturation*. When TF-IDF ranks documents, it may prefer documents that repeat a query word many times, even if it the document isn't truly any more relevant. By contrast, BM25 tempers preference for documents that frequently use a query term. It also normalizes for document length, which makes rankings more "fair" amongst documents with a wide range of lengths. Importantly, these models *only* care about exact keywords. They don't account for synonyms or contextual meaning. Still, we'll later see they perform quite well on our data set. 
+The two lexical methods we're interested in are BM25 and TF-IDF. In short, TF-IDF tries to score document relevance based on how often a word from the query appears in the search documents. The idea is that, for each word in the query, if lots of documents have that word, it's probably not super indicative of document relevance. By contrast, if a query word appears in just a few documents, it probably tells us a lot about the document's relevance. BM25 is similar, but it also has a few enhancements. BM25 adds diminishing returns to search term frequency, which mitigates an issue in TF-IDF called *term frequency saturation*. When TF-IDF ranks documents, it may prefer documents that repeat a query word many times, even if the document isn't truly any more relevant. By contrast, BM25 tempers preference for documents that frequently use a query term. It also normalizes for document length, which makes rankings more "fair" amongst documents with a wide range of lengths. Importantly, these models *only* care about exact keywords. They don't account for synonyms or contextual meaning. Still, we'll later see they perform quite well on our data set. 
 
 We also tested dense embedding models using `SentenceTransformers`. Embedding models differ from lexical methods in the sense that they try to extract meaning from the query. To do this, these models convert queries and documents into vectors, then rank documents based on how similar their vectors are to a query vector. Embedding-based retrieval is useful because it can capture semantic similarity even when the query and document do not use the exact same wording. However, these models are usually more computationally expensive than lexical methods, especially considering larger models like `Qwen3-Embedding-4B`.
 
@@ -448,13 +448,42 @@ As an aside, we tried using `MarginMSELoss` for this, since we could have `(quer
 
 # Evaluating Our Options
 
-Now that we have a bunch of off-the-shelf models and our own fancy fine-tuned model, we need to benchmark them. To do this, we'll need to use a few different metrics to see how each option performs. Generally, when we're searching, we're only going to consider some of the top returned documents. We may think of this as a "first page on a Google search"—we usually aren't interested in anything more than the top results. We'll call the number of top results we retrieve `K`. When we talk about some `Metric@K`, what we mean to say is that we're evaluating that metric if we just look at our top `K` documents. There are three common metrics that we'll look at today
+Now that we have a bunch of off-the-shelf models and our own fancy fine-tuned model, we need to benchmark them. To do this, we'll need to use a few different metrics to see how each option performs. Generally, when we're searching, we're only going to consider some of the top returned documents. We may think of this as a "first page on a Google search"—we usually aren't interested in anything more than the top results. We'll call the number of top results we retrieve `K`. When we talk about some `Metric@K`, what we mean to say is that we're evaluating that metric if we just look at our top `K` documents. There are three common metrics that we'll look at today:
 
 * **Recall@K**: Recall tells us how many of the relevant documents were returned for some query. For example, if we got one relevant document, but we could've gotten ten relevant documents, our score would be `0.1`. We might think of this metric as how "comprehensive" our top-k is. Importantly, this metric does not care about *how* relevant documents are or how they are ranked, only if they are relevant.
 
-* **Precision@K**: Precision tells us what fraction of our top-k documents are relevant. For instance, if all of our `k` documents are relevant, our score would be `1`. Conversely, we may think of this score as going down as irrelevant documents are included in our top-k. Again, this metric only cares about *if* a document is relevant, much like Recall@K.
+* **Precision@K**: Precision tells us what fraction of our top-k documents are relevant. For instance, if all of our `k` documents are relevant, our score would be `1`. Conversely, we may think of this score as going down as irrelevant documents are included in our top-k. To give an extreme example, if there is only one relevant document and our K is 10, retrieving that document would make our `precision = 0.1`; all of the other 9 results were irrelevant. This also means that as K grows, precision tends to drop naturally, since we are pulling in more results alongside a fixed number of relevant ones. Again, this metric only cares about *if* a document is relevant, much like Recall@K.
 
-* **NDCG@K**: This tells us how well our retrieved documents are ordered. Essentially, we want our most relevant documents to come earlier in our top-k documents. You may consider how generally want the "top-hit" to be what you searched for. The better our list of "top-hits" is, the better our NDCG score. Conversely, if our best documents are ranked later in our top-k, our NDCG suffers. In this project, since we had our LLM rank the relevance of each document, we can use that ranking to give us `relevance = 1 / rank`. That way, our most relevant document has `relevance = 1`, our second will have `0.5`, and so on.
+* **NDCG@K** (Normalized Discounted Cumulative Gain): This tells us how well our retrieved documents are ordered. Essentially, we want our most relevant documents to come earlier in our top-k documents. The better our list of "top hits" is, the better our NDCG score. Conversely, if our best documents are ranked later in our top-k, our NDCG suffers. The "discounted" part of the name refers to the fact that each position in the ranking is penalized by a logarithmic factor. For instance, a highly relevant document at rank five contributes much less to the score than if it were at rank one. NDCG is a bit flexible in that you can assign relevance scores to each relevant document. Since we had our LLM rank the relevant documents per query, we simply assign `relevance = 1 / rank`, which means our NDCG scores will also encode how well our retrieval matched the LLM's ranking. 
 
-With that background, we can see how our different retrieval methods perform. As a point of clarity, the data in these tables are averages of the metric scores when evaluated on each query.
+With our metrics defined, we can now look at how each retrieval method actually performed. After evaluating each retrieval method on a holdout set of 200 queries (i.e., what our fine-tune did *not* train on), we get these results for `K=10`.
+ 
+| Metric    | qwen3-4b | MiniLM-Finetune | BM25   (Okapi) | qwen3-0.6b | bge-small-en-v1.5 | TF-IDF | all-MiniLM-L6-v2 | bert-base-uncased |
+|-----------|----------|-----------------|----------------|------------|-------------------|--------|------------------|-------------------|
+| Recall    | **0.644**| 0.615           | 0.596          | 0.579      | 0.466             | 0.465  | 0.430            | 0.192             |
+| Precision | **0.141**| 0.134           | 0.124          | 0.124      | 0.099             | 0.095  | 0.093            | 0.038             |
+| NDCG      | **0.568**| 0.551           | 0.542          | 0.534      | 0.396             | 0.393  | 0.347            | 0.141             |
+{caption="K = 10, sorted from best to worst Recall"}
 
+Qwen3-4b leads with a Recall of `0.644`, meaning it found the correct chunk in its top 10 results about 64% of the time. This is a bit lackluster for our purpose, but it is still quite good compared to our other options. Notably, our fine-tuned MiniLM is vastly improved over the base model, achieving an approximate `0.2` increase in Recall and NDCG! BM25 and qwen3-0.6b follow closely behind, with BGE, TF-IDF, and MiniLM firmly performing worse in all metrics. We can also see that precision scores are somewhat low, which is expected, since many of our queries had just a few relevant documents. Lastly, BERT base does poorly, since it's not trained for retrieval.
+
+Perhaps the most surprising result is how competitive BM25 is. Despite having no intrinsic understanding of language or meaning, it matches or beats most other options on every metric. This is especially clear if we look at the results for `K=1`. In this case, BM25 actually beats every other option in Precision and NDCG, and is practically tied with Qwen3-0.6b in Recall.
+
+| Metric    | qwen3-4b | MiniLM-Finetune | BM25   (Okapi) | qwen3-0.6b | bge-small-en-v1.5 | TF-IDF | all-MiniLM-L6-v2 | bert-base-uncased |
+|-----------|----------|-----------------|----------------|------------|-------------------|--------|------------------|-------------------|
+| Recall    | 0.278    | 0.286           | 0.295          | **0.296**  | 0.192             | 0.179  | 0.151            | 0.065             |
+| Precision | 0.475    | 0.490           | **0.520**      | 0.500      | 0.335             | 0.315  | 0.275            | 0.105             |
+| NDCG      | 0.431    | 0.453           | **0.464**      | 0.446      | 0.302             | 0.287  | 0.236            | 0.092             |
+{caption="K = 1, in the same order as above"}
+
+We can see that BM25 ranked a relevant document first more than half of the time—not bad. Of course, we still see a similar trend of the Qwen models, our finetune, and BM25 performing quite well, while the others trail. Since our K is just 1, we lose some granularity in our results, so we see that our four top-performing options are approximately tied in most metrics. 
+
+It is also worth noting that our dataset generation method likely contributed to BM25's success. Since we generated questions from the case summaries using an LLM, it is possible it borrowed the language and exact wording from those documents, giving an unfair advantage to BM25 and TF-IDF. If we built our dataset by gathering relevant cases from a question, rather than generating questions from cases, we may get more realistic results. This limitation is one to be kept in mind for future testing and while interpreting these results. 
+
+# Conclusions
+
+So if we were building a RAG using Supreme Court cases, what model would we want to use? If we were only concerned with our benchmark scores, Qwen3-4b would be the best choice. However, running a 4-billion parameter model is quite expensive, and we can see that it doesn't have a significant edge over our MiniLM finetune or BM25. That realistically leaves our finetune as one of the strongest embedding models, so we'd be choosing between BM25 and our finetune. BM25 is without a doubt less computationally expensive to run, with the caveat that our dataset generation may have biased BM25's performance. Realistically, since embedding models are less sensitive to exact keyword matches, and our finetune performs about as well as BM25, we'd probably want to use the finetune.
+
+It's also worth considering if our dataset method scales. Of course, it depends. We spent about *$1.20* to generate a set of questions for our ~3700 chunks, which were about 300-500 words each. If we take Wikipedia pages as an example— which are about 700 words on average ([source](https://en.wikipedia.org/wiki/Wikipedia:Size_of_Wikipedia))—then we could likely process about 2000 Wikipedia pages. For a domain-specific use case, this likely isn't unreasonable; $100 would net you a dataset of about 200,000 queries. You may not even need to go so far to make an effective retrieval system; we were able to get significant improvements with MiniLM on our relatively small data set. Furthermore, the LLM generally only picked a few documents from each cluster to generate documents from. We could trim larger clusters down to save money while retaining at least a few negative documents per query. After all, our MiniLM finetune actually did worse with hard negatives, so it may be better to focus on generating more sample queries instead.
+
+We hope you learned something, and thanks for reading!
