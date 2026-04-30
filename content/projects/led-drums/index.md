@@ -18,7 +18,3 @@ This project was born out of my love for music and my affinity for things that l
 {{< figure src="/images/projects/led-drums/parts.jpg" caption="Most of the goodies needed for this project." >}}
 
 ---
-
-Finally, here's a small video of my putting the whole rig to use. I'm not certain how well the loudness level's on the video clip are adjusted, so I'd suggest making sure your system's volume isn't up too high. I particularly like this video because it shows how the system can integrate with other systems like my LED top hat.
-
-{{< video src="/video/projects/led-drums/drumming.mp4" >}}
