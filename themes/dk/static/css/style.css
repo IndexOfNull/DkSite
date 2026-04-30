@@ -756,3 +756,63 @@ blockquote blockquote {
 blockquote blockquote::before {
   color: #89b4fa;
 }
+
+/* Tables */
+.table-caption {
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+  font-size: 1rem;
+  margin-top: -0.75rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+#content table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 1rem;
+  margin: 0;
+}
+
+#content thead {
+  background: #20343f;
+  border-bottom: 2px solid var(--accent);
+}
+
+#content thead th {
+  padding: 0.7rem 1.1rem;
+  text-align: left;
+  font-family: Tektur;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+#content tbody tr {
+  background: #1e1e2e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  transition: background 0.12s;
+}
+
+#content tbody tr:last-child {
+  border-bottom: none;
+}
+
+#content tbody tr:hover {
+  background: #252538;
+}
+
+#content tbody td {
+  padding: 0.65rem 1.1rem;
+  color: white;
+  vertical-align: top;
+}
