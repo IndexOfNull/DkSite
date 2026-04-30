@@ -22,13 +22,11 @@ Our goal was to simulate a real-world retrieval problem: Given a query about sup
 # Scraping the Data
 We were interested in coming up with our own data set. To keep things interesting (but not too difficult), we decided on scraping summaries of US Supreme Court from Oyez.org. Each case summarized by Oyez usually comes with a summary of the case and a conclusion, which are usually about the size of a paragraph. Each page is also homogenous, which greatly simplifies data set creation.
 
-
 Selenium is a natural choice for scraping, but it is a bit heavy. It’s always worth checking if your page fetches data from an API. Many times, you can leverage this for scraping purposes. Usually, this only involves opening up your browser's developer tools and poking around in the "Network" tab.
 
 {{< figure src="/images/projects/data-sci-lab-final-project/networktab.png" caption="Discovering the Oyez API" >}}
 
 Lucky for us, we can see that Oyez has an API we can use, which saves a fair bit of work parsing out the data ourselves. In order to scrape every case, we need to first scrape the listing. The `requests` library makes this relatively easy:
-
 
 ```py
 BASE_URL = "https://api.oyez.org"
@@ -63,7 +61,6 @@ This gives us a bunch of stubs that look like this:
 ]
 ```
 We can fetch all of the more in-depth case details by querying the `href` fields provided in each stub. The code to do this is very similar to the above. Once we have the stub and the detailed information for each case, we can flatten it down into a simple list of records:
-
 
 ```py
 def flatten(stub, detail):
@@ -101,7 +98,6 @@ for stub, detail in case_data:
     records.append(flatten(stub, detail))
 ```
 
-
 Here, we mostly care about the `facts_of_the_case` and `conclusion` fields, which contain the actual summaries of each supreme court case. We retain the other data just in case we need it.
 
 Of course, at this point, it's convenient to convert our data into a `pandas` DataFrame, which makes interacting with our data much more convenient:
@@ -110,7 +106,6 @@ df = pd.DataFrame(records).set_index("oyez_id")
 ```
 That's really all there was to scraping here: just parsing JSON from a bunch of API endpoints! But we still have to do...
 
-
 # Dataset Construction
 
 Naturally, our data has some imperfections, including duplicates, and some raw HTML we need to rid ourselves of. Somehow, during the scraping process we found that some cases got scraped many times—no good. Luckily, since we index on the unique id for each case, we can use an elegant `pandas` one-liner, which will collapse all of our duplicate entries by unique id:
@@ -118,14 +113,12 @@ Naturally, our data has some imperfections, including duplicates, and some raw H
 df = df.groupby(df.index).agg('first') # This dropped 70 duplicate entries!
 ```
 
-
 We're also primarily interested in the text content of these pages, so any rows without any text content are useless to us. Doing this is a bit ugly in `pandas`; we can find all the row indexes that *do* have at least one text field filled, then regenerate our DataFrame. It's not efficient, but it gets the job done:
 ```py
 content_columns = ['facts_of_the_case', 'question', 'conclusion'] # Columns with our text content
 df = df[~df[content_columns].isna().all(axis=1)]                  # Drop rows where all content is empty
 ```
 This dropped 4666 rows, leaving only 3746! It seems Oyez has a backlog...
-
 
 Another slight kink is that our dataset text is formatted in HTML.
 <img here>
@@ -160,12 +153,9 @@ df.to_csv(CSV_OUTPUT)
 ```
 # Generating a Data Set
 
-
 To try to evaluate different options for retrieval, we need to turn this scraped data into a set of questions and relevant documents. Even better, we can make our data richer by ranking how relevant each document is with respect to each question.
 
-
 However, this poses a slight problem: manually generating questions from over 3,000 documents is time-consuming and requires significant mental effort. Luckily, modern LLMs can help out here; cheap models can generate our data set for just a few dollars. However, we still need to be smart about how we leverage LLMs. Since we want questions that target similar documents, we can try using a large embedding model to group like cases together. That way, we can feed a small selection of documents to an LLM, which will keep things cheap (and possible!):
-
 
 ```py
 from openai import OpenAI
@@ -239,7 +229,6 @@ Importantly, writing a good system prompt can make a huge difference in the outc
 
 > Given summaries of supreme court cases, generate three realistic questions that an average person would ask such that the answer is best found in this chunk. You MUST pretend that you do not know what the correct case or specifics are when formulating the question (i.e., it should be a question with an unknown document for an answer; the idea is that this is used to train a RAG to find it for us). Limit the number of questions that include the case name or a person name to 2 or three max. Avoid using legal jargon like specific case law; keep questions simple and general enough. Document ranks must be distinct (i.e., no two documents can be ranked the same for a given question). Determine if each of the supplied cases is relevant to the question, rank its relevance, and give a short reason as to the ranking. Ensure there is only ONE document per oyez_id (i.e., no duplicate ids)!
 
-
 Of course, we need to generate the prompts that we'll use when we feed each cluster into the LLM. Since we've already given the LLM instructions in the system prompt, we can just give it the clustered case chunks. A little helper function is all we need to do this:
 ```py
 def build_prompt(clustered_chunks, field='facts_of_the_case'):
@@ -304,7 +293,6 @@ gpt_response = client.responses.parse(
     text_format=QueryBatch,
 ) # Will return an instance of QueryBatch :D
 ```
-
 
 ### LLM Batching
 
@@ -445,7 +433,6 @@ model.save_pretrained("output/minilm-finetune")
 
 As an aside, we tried using `MarginMSELoss` for this, since we could have `(query, positive, negative, label)` pairs, where `label` was how "negative" the example was. After finetuning, we saw that our training loss got better. However, on our holdout set, loss did not improve at all, so we weren't actually making any improvement. We think there are a few reasons for this. Primarily, when we used this method, we made a training pair for every positive document and all corresponding negative combinations. It is also likely our `per_device_train_batch_size` was too small. Good thing we were able to fix it by using `MultipleNegativesRankingLoss` and increasing our batch sizes.
 
-
 # Evaluating Our Options
 
 Now that we have a bunch of off-the-shelf models and our own fancy fine-tuned model, we need to benchmark them. To do this, we'll need to use a few different metrics to see how each option performs. Generally, when we're searching, we're only going to consider some of the top returned documents. We may think of this as a "first page on a Google search"—we usually aren't interested in anything more than the top results. We'll call the number of top results we retrieve `K`. When we talk about some `Metric@K`, what we mean to say is that we're evaluating that metric if we just look at our top `K` documents. There are three common metrics that we'll look at today:
@@ -484,6 +471,6 @@ It is also worth noting that our dataset generation method likely contributed to
 
 So if we were building a RAG using Supreme Court cases, what model would we want to use? If we were only concerned with our benchmark scores, Qwen3-4b would be the best choice. However, running a 4-billion parameter model is quite expensive, and we can see that it doesn't have a significant edge over our MiniLM finetune or BM25. That realistically leaves our finetune as one of the strongest embedding models, so we'd be choosing between BM25 and our finetune. BM25 is without a doubt less computationally expensive to run, with the caveat that our dataset generation may have biased BM25's performance. Realistically, since embedding models are less sensitive to exact keyword matches, and our finetune performs about as well as BM25, we'd probably want to use the finetune.
 
-It's also worth considering if our dataset method scales. Of course, it depends. We spent about *$1.20* to generate a set of questions for our ~3700 chunks, which were about 300-500 words each. If we take Wikipedia pages as an example— which are about 700 words on average ([source](https://en.wikipedia.org/wiki/Wikipedia:Size_of_Wikipedia))—then we could likely process about 2000 Wikipedia pages. For a domain-specific use case, this likely isn't unreasonable; $100 would net you a dataset of about 200,000 queries. You may not even need to go so far to make an effective retrieval system; we were able to get significant improvements with MiniLM on our relatively small data set. Furthermore, the LLM generally only picked a few documents from each cluster to generate documents from. We could trim larger clusters down to save money while retaining at least a few negative documents per query. After all, our MiniLM finetune actually did worse with hard negatives, so it may be better to focus on generating more sample queries instead.
+It's also worth considering if our dataset method scales. Of course, it depends. We spent about *$1.20* to generate a set of ~370 questions for our ~3700 chunks, which were about 300-500 words each. If we take Wikipedia pages as an example—which are about 700 words on average ([source](https://en.wikipedia.org/wiki/Wikipedia:Size_of_Wikipedia))—then we could likely process about 2000 Wikipedia pages. For a domain-specific use case, this likely isn't unreasonable; $100 would net you a dataset of about 200,000 queries. You may not even need to go so far to make an effective retrieval system; we were able to get significant improvements with MiniLM on our relatively small data set. Furthermore, the LLM generally only picked a few documents from each cluster to generate documents from. We could trim larger clusters down so each LLM call costs less, at the cost of some negatives. After all, our MiniLM finetune actually did worse with hard negatives, so it may be better to focus on generating more queries instead of lazily mining for negatives.
 
 We hope you learned something, and thanks for reading!
