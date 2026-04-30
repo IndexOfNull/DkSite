@@ -1,6 +1,7 @@
-<div>
-    <br>
-    <span class="styled-font large-text header-logo"><a class="styled-link" href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></span>
-    {{- partial "navbar.html" . -}}
-    <hr class="horizontal-divider small-hide">
-</div>
+<header class="site-header">
+    <div class="site-header-inner">
+        <span class="styled-font header-logo"><a class="styled-link" href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></span>
+        {{- partial "navbar.html" . -}}
+    </div>
+    {{- partial "colorfuldivider.html" . -}}
+</header>

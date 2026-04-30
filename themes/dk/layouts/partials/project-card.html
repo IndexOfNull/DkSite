@@ -1,0 +1,23 @@
+{{- $cover := false -}}
+{{- if index .Params "icon" -}}
+    {{- if .Resources.GetMatch .Params.icon -}}
+        {{- $cover = (.Resources.GetMatch .Params.icon).RelPermalink -}}
+    {{- else -}}
+        {{- $cover = absURL .Params.icon -}}
+    {{- end -}}
+{{- else if $.Site.Params.AutoCover -}}
+    {{- if .Resources.GetMatch "cover.*" -}}
+        {{- $cover = (.Resources.GetMatch "cover.*").RelPermalink -}}
+    {{- end -}}
+{{- end -}}
+<div class="project-card">
+    <a class="styled-link" href="{{ .Permalink }}">
+        <img src="{{ $cover }}" alt="{{ .Title }}">
+        <div class="project-card-info">
+            <div>
+                <h3>{{ .Title | safeHTML }}</h3>
+                <span class="card-date">{{- .Date.Format "2006" -}}</span>
+            </div>
+        </div>
+    </a>
+</div>

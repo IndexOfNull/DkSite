@@ -1,14 +1,31 @@
-{{ define "main" }}
+<!DOCTYPE html>
+<html>
+    {{- partial "head.html" . -}}
+    <body>
+        <div class="home-wrapper">
+            <div class="home-inner">
+                <div class="splash-content">
+                    <h1 class="text-center splash-title">{{ .Site.Title }}</h1>
+                    <h3 class="subtitle text-center"><i>{{ .Site.Params.SplashSubtitle }}</i></h3>
+                    {{- partial "colorfuldivider.html" . -}}
+                </div>
 
-<div class="splash-content">
-  <div class="">
-    <h3 class="subtitle text-center"><i>{{ .Site.Params.SplashSubtitle }}</i></h3>
-    <h1 class="text-center splash-title">{{ .Site.Title }}</h1>
-  </div>
-  {{- partial "colorfuldivider.html" . -}}
-  <br>
-  <div class="text-center">
-    {{- partial "navbar.html" . -}}
-  </div>
-</div>
-{{ end }}
+                {{- $projects := where .Site.RegularPages "Section" "projects" -}}
+                {{- $projects = first 3 ($projects.ByPublishDate.Reverse) -}}
+                {{- if $projects -}}
+                <section class="home-featured">
+                    <div class="home-featured-inner">
+                        <h2 class="home-section-title">Recent Work</h2>
+                        <div class="card-list-container">
+                            {{- range $projects -}}
+                                {{- partial "project-card.html" . -}}
+                            {{- end -}}
+                        </div>
+                        <p class="home-see-all"><a href="/projects/">All projects →</a></p>
+                    </div>
+                </section>
+                {{- end -}}
+            </div>
+        </div>
+    </body>
+</html>
