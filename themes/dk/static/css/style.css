@@ -107,7 +107,7 @@ figure {
 .page-container {
     display: block;
     margin: auto;
-    width: 60%;
+    width: 50%;
 }
 
 .project-body-container {
@@ -143,6 +143,10 @@ Post Page
 .post-title {
     font-size: 4rem;
     margin-bottom: 0.5rem;
+}
+
+.post-metadata {
+    font-size: 1.2rem;
 }
 
 #content {
@@ -371,4 +375,145 @@ a:not(.navbar-selected):hover {
 html {
     visibility: visible;
     opacity: 1;
+}
+
+/* Code block container */
+.highlight {
+  position: relative;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1e1e2e;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+/* The <pre> element inside .highlight */
+.highlight pre {
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+/* Inline code (outside of blocks) */
+code:not(.highlight code) {
+  background: #2a2a3d;
+  color: #cba6f7;
+  padding: 0.15em 0.45em;
+  border-radius: 4px;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.85em;
+}
+
+/* Language label badge */
+.highlight::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.7rem;
+  font-family: sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a6adc8;
+  background: #313244;
+  border-bottom-left-radius: 6px;
+}
+
+/* Line numbers (if enabled via Hugo's `lineNos` option) */
+.highlight .ln {
+  user-select: none;
+  margin-right: 1.25rem;
+  color: #45475a;
+}
+
+/* Scrollbar styling */
+.highlight pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.highlight pre::-webkit-scrollbar-track {
+  background: #181825;
+}
+
+.highlight pre::-webkit-scrollbar-thumb {
+  background: #45475a;
+  border-radius: 3px;
+}
+
+.highlight pre::-webkit-scrollbar-thumb:hover {
+  background: #585b70;
+}
+
+/* Blockquote container */
+blockquote {
+  position: relative;
+  margin: 1.5rem 0;
+  padding: 1rem 1.75rem 1rem 1.75rem;
+  background: #1e1e2e;
+  border-left: 3px solid #cba6f7;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  color: #a6adc8;
+  font-style: italic;
+}
+
+/* Decorative quotation mark */
+blockquote::before {
+  content: "\201C";
+  position: absolute;
+  top: -0.15rem;
+  left: 0.9rem;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: #cba6f7;
+  opacity: 0.3;
+  font-family: Georgia, serif;
+  pointer-events: none;
+}
+
+/* Paragraph inside blockquote */
+blockquote p {
+  margin: 0;
+  padding-left: 1.25rem;
+  line-height: 1.75;
+}
+
+/* Multiple paragraphs */
+blockquote p + p {
+  margin-top: 0.75rem;
+}
+
+/* Citation / attribution (e.g. <cite> or a trailing em-dash line) */
+blockquote cite,
+blockquote footer {
+  display: block;
+  margin-top: 0.75rem;
+  padding-left: 1.25rem;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #cba6f7;
+}
+
+blockquote cite::before,
+blockquote footer::before {
+  content: "— ";
+}
+
+/* Nested blockquotes */
+blockquote blockquote {
+  margin-top: 0.75rem;
+  border-left-color: #89b4fa;
+  background: #181825;
+}
+
+blockquote blockquote::before {
+  color: #89b4fa;
 }
