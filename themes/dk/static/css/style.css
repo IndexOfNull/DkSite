@@ -191,6 +191,16 @@ hr {
     margin: 0 auto;
 }
 
+#tagline-word {
+    border-right: 2px solid currentColor;
+    animation: tagline-cursor 0.8s step-end infinite;
+}
+
+@keyframes tagline-cursor {
+    0%, 100% { border-color: currentColor; }
+    50%       { border-color: transparent; }
+}
+
 /*
 ***************
     Home featured section
